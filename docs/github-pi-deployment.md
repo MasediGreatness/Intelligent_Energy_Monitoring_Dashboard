@@ -19,15 +19,17 @@ requires it. If any credential has been pasted into a chat, issue, terminal
 history, or other untrusted location, rotate it before continuing and enable
 two-factor authentication.
 
-Create a **private** empty GitHub repository. Do not add a generated README or
-`.gitignore` when the local project already contains them. On the development
-computer, authenticate with GitHub CLI or configure an SSH key, then publish
-the existing repository:
+The canonical repository is
+[`MasediGreatness/Intelligent_Energy_Monitoring_Dashboard`](https://github.com/MasediGreatness/Intelligent_Energy_Monitoring_Dashboard).
+It is currently public. Changing that visibility is a governance decision:
+keep it public only when public source distribution is intentional, and never
+commit secrets or operational data. On the development computer, authenticate
+with GitHub CLI or configure an SSH key, then publish the existing repository:
 
 ```bash
 gh auth login --web --git-protocol ssh
 git branch -M main
-git remote add origin git@github.com:MasediGreatness/intelligent-energy-dashboard.git
+git remote add origin git@github.com:MasediGreatness/Intelligent_Energy_Monitoring_Dashboard.git
 git add .
 git commit -m "Initial intelligent energy dashboard release"
 git push -u origin main
@@ -44,7 +46,8 @@ Recommended repository settings are:
 - require two-factor authentication for repository collaborators;
 - leave Actions workflow permissions at read-only by default;
 - allow this repository's workflow to create packages;
-- keep both GHCR packages private unless public distribution is intentional.
+- choose GHCR package visibility deliberately and keep it consistent with the
+  source-distribution decision.
 
 No repository secret is required to publish images. The workflow uses the
 short-lived, repository-scoped `GITHUB_TOKEN`; only its publish job receives
@@ -76,8 +79,8 @@ tag. Use a new tag for every release; never move an existing release tag.
 ```bash
 git switch main
 git pull --ff-only
-git tag -a v1.0.0 -m "Intelligent Energy Dashboard v1.0.0"
-git push origin v1.0.0
+git tag -a v1.0.1 -m "Intelligent Energy Dashboard v1.0.1"
+git push origin v1.0.1
 ```
 
 Open the repository's **Actions** page and wait for `Test and publish container
@@ -107,7 +110,15 @@ as root-equivalent and sign out and back in before continuing.
 
 ### Give the Pi read-only source access
 
-For a private repository, create a dedicated SSH deploy key on the Pi:
+For the current public repository, clone over HTTPS without a credential:
+
+```bash
+git clone https://github.com/MasediGreatness/Intelligent_Energy_Monitoring_Dashboard.git
+cd Intelligent_Energy_Monitoring_Dashboard
+```
+
+If the repository is later made private, create a dedicated SSH deploy key on
+the Pi instead:
 
 ```bash
 install -d -m 700 "$HOME/.ssh"
@@ -122,8 +133,8 @@ make future pulls use only that key:
 
 ```bash
 GIT_SSH_COMMAND="ssh -i $HOME/.ssh/intelligent_energy_deploy -o IdentitiesOnly=yes" \
-  git clone git@github.com:MasediGreatness/intelligent-energy-dashboard.git
-cd intelligent-energy-dashboard
+  git clone git@github.com:MasediGreatness/Intelligent_Energy_Monitoring_Dashboard.git
+cd Intelligent_Energy_Monitoring_Dashboard
 git config core.sshCommand \
   "ssh -i $HOME/.ssh/intelligent_energy_deploy -o IdentitiesOnly=yes"
 ```
@@ -169,9 +180,9 @@ Pi and configure the two GHCR image names. A release configuration resembles:
 ```dotenv
 COMPOSE_PROJECT_NAME=intelligent-energy-dashboard
 TARGET_PLATFORM=linux/arm64
-API_IMAGE=ghcr.io/masedigreatness/intelligent-energy-dashboard-api
-WEB_IMAGE=ghcr.io/masedigreatness/intelligent-energy-dashboard-web
-IMAGE_TAG=v1.0.0
+API_IMAGE=ghcr.io/masedigreatness/intelligent_energy_monitoring_dashboard-api
+WEB_IMAGE=ghcr.io/masedigreatness/intelligent_energy_monitoring_dashboard-web
+IMAGE_TAG=v1.0.1
 LAN_BIND_ADDRESS=192.168.1.50
 DASHBOARD_PORT=8080
 ```

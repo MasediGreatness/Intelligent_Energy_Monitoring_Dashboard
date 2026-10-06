@@ -187,6 +187,8 @@ Playwright setup and evidence commands are recorded in the
 
 ## Raspberry Pi 4 and GitHub deployment
 
+- The canonical source repository is
+  [MasediGreatness/Intelligent_Energy_Monitoring_Dashboard](https://github.com/MasediGreatness/Intelligent_Energy_Monitoring_Dashboard).
 - For an on-device source build and all operational safeguards, follow the
   [Raspberry Pi runbook](docs/operations.md).
 - For GitHub Actions-built ARM64 images in GitHub Container Registry, follow

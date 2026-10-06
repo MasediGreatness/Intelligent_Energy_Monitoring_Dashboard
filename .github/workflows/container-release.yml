@@ -128,8 +128,8 @@ jobs:
           APP_SECRET_KEY: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
           INGEST_API_KEY: abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789
           LAN_BIND_ADDRESS: 192.168.10.50
-          API_IMAGE: ghcr.io/example/intelligent-energy-dashboard-api
-          WEB_IMAGE: ghcr.io/example/intelligent-energy-dashboard-web
+          API_IMAGE: ghcr.io/example/intelligent_energy_monitoring_dashboard-api
+          WEB_IMAGE: ghcr.io/example/intelligent_energy_monitoring_dashboard-web
           IMAGE_TAG: ci
         run: |
           docker compose --profile tools \
