@@ -1,0 +1,263 @@
+name: Test and publish container images
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+concurrency:
+  group: container-release-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_type != 'tag' }}
+
+# Jobs are read-only unless the publish job explicitly requests package access.
+permissions:
+  contents: read
+
+env:
+  PYTHON_VERSION: "3.12"
+  NODE_VERSION: "24"
+
+jobs:
+  backend:
+    name: Backend quality and tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      APP_ENV: test
+      DATABASE_URL: postgresql+psycopg://energy:ci-only-password@127.0.0.1:5432/energy_test
+      APP_SECRET_KEY: ci-only-app-secret-key-32-characters
+      INGEST_API_KEY: ci-only-ingest-api-key-1234567890
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: energy_test
+          POSTGRES_USER: energy
+          POSTGRES_PASSWORD: ci-only-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U energy -d energy_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: |
+            requirements-backend.txt
+            requirements-dev.txt
+
+      - name: Install backend and quality dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Apply migrations and seed deterministic devices
+        working-directory: apps/api
+        run: |
+          python -m alembic -c alembic.ini upgrade head
+          python -m app.simulator.cli seed
+
+      - name: Run Ruff
+        working-directory: apps/api
+        run: ruff check .
+
+      - name: Run strict MyPy
+        working-directory: apps/api
+        run: mypy app
+
+      - name: Run backend tests
+        working-directory: apps/api
+        run: pytest
+
+  frontend:
+    name: Frontend quality, tests, and build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install locked frontend dependencies
+        run: npm ci
+
+      - name: Run frontend lint and formatting checks
+        run: npm run lint
+
+      - name: Run frontend tests
+        run: npm test
+
+      - name: Build production frontend
+        run: npm run build
+
+  verify-images:
+    name: Verify AMD64 and ARM64 images
+    needs:
+      - backend
+      - frontend
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Validate pull-only Pi Compose boundary
+        env:
+          DB_PASSWORD: 0123456789abcdef0123456789abcdef0123456789abcdef
+          APP_SECRET_KEY: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+          INGEST_API_KEY: abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789
+          LAN_BIND_ADDRESS: 192.168.10.50
+          API_IMAGE: ghcr.io/example/intelligent-energy-dashboard-api
+          WEB_IMAGE: ghcr.io/example/intelligent-energy-dashboard-web
+          IMAGE_TAG: ci
+        run: |
+          docker compose --profile tools \
+            -f infra/docker-compose.pi.yml -f infra/docker-compose.ghcr.yml \
+            config --format json > /tmp/pi-compose.json
+          jq -e '
+            (.services.api | has("build") | not) and
+            (.services.migrate | has("build") | not) and
+            (.services.web | has("build") | not) and
+            (.services.api | has("ports") | not) and
+            (.services.db | has("ports") | not) and
+            (.services.web.ports | length == 1) and
+            (.networks.backend.internal == true)
+          ' /tmp/pi-compose.json
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build API for both target architectures
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/api/Dockerfile
+          target: runtime
+          platforms: linux/amd64,linux/arm64
+          push: false
+          outputs: type=cacheonly
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,mode=max,scope=api
+
+      - name: Build web for both target architectures
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/web/Dockerfile
+          target: production
+          platforms: linux/amd64,linux/arm64
+          push: false
+          outputs: type=cacheonly
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,mode=max,scope=web
+
+  publish:
+    name: Publish verified images to GHCR
+    needs: verify-images
+    if: >-
+      github.event_name != 'pull_request' &&
+      (github.ref == format('refs/heads/{0}', github.event.repository.default_branch) ||
+      startsWith(github.ref, 'refs/tags/v'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Derive lowercase GHCR names
+        id: images
+        shell: bash
+        run: |
+          repository="${GITHUB_REPOSITORY,,}"
+          echo "api=ghcr.io/${repository}-api" >> "$GITHUB_OUTPUT"
+          echo "web=ghcr.io/${repository}-web" >> "$GITHUB_OUTPUT"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Sign in to GHCR with the job token
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create API image metadata
+        id: api-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.images.outputs.api }}
+          tags: |
+            type=sha,prefix=sha-
+            type=ref,event=tag
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Create web image metadata
+        id: web-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.images.outputs.web }}
+          tags: |
+            type=sha,prefix=sha-
+            type=ref,event=tag
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Publish API image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/api/Dockerfile
+          target: runtime
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.api-meta.outputs.tags }}
+          labels: ${{ steps.api-meta.outputs.labels }}
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,mode=max,scope=api
+          provenance: mode=max
+          sbom: true
+
+      - name: Publish web image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/web/Dockerfile
+          target: production
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.web-meta.outputs.tags }}
+          labels: ${{ steps.web-meta.outputs.labels }}
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,mode=max,scope=web
+          provenance: mode=max
+          sbom: true

@@ -1,0 +1,12 @@
+# Pull-only production overlay for images published by GitHub Actions.
+# Use together with docker-compose.pi.yml; never use this file by itself.
+
+services:
+  migrate:
+    build: !reset null
+
+  api:
+    build: !reset null
+
+  web:
+    build: !reset null

@@ -1,0 +1,143 @@
+x-bounded-logging: &bounded-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-api-environment: &api-environment
+  APP_ENV: gateway
+  DATABASE_URL: postgresql+psycopg://energy:${DB_PASSWORD:?DB_PASSWORD must be set}@db:5432/energy
+  APP_SECRET_KEY: ${APP_SECRET_KEY:?APP_SECRET_KEY must be set}
+  INGEST_API_KEY: ${INGEST_API_KEY:?INGEST_API_KEY must be set}
+  DEFAULT_TIMEZONE: ${DEFAULT_TIMEZONE:-Africa/Johannesburg}
+  ONLINE_TIMEOUT_SECONDS: ${ONLINE_TIMEOUT_SECONDS:-10}
+  STALE_TIMEOUT_SECONDS: ${STALE_TIMEOUT_SECONDS:-60}
+  DEMAND_INTERVAL_MINUTES: ${DEMAND_INTERVAL_MINUTES:-15}
+  DEMAND_LIMIT_KW: ${DEMAND_LIMIT_KW:-50}
+  TARIFF_ZAR_PER_KWH: ${TARIFF_ZAR_PER_KWH:-3.00}
+  SIMULATOR_ENABLED: ${SIMULATOR_ENABLED:-false}
+  SIMULATOR_SEED: ${SIMULATOR_SEED:-118}
+  AUTH_SESSION_MINUTES: ${AUTH_SESSION_MINUTES:-30}
+  SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
+
+x-api-image: &api-image
+  image: ${API_IMAGE:-intelligent-energy-dashboard-api}:${IMAGE_TAG:-local}
+  platform: ${TARGET_PLATFORM:-linux/arm64}
+  build:
+    context: ..
+    dockerfile: apps/api/Dockerfile
+    target: runtime
+
+services:
+  db:
+    image: postgres:17-alpine
+    platform: ${TARGET_PLATFORM:-linux/arm64}
+    environment:
+      POSTGRES_DB: energy
+      POSTGRES_USER: energy
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U energy -d energy"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+    stop_grace_period: 1m
+    init: true
+    security_opt:
+      - no-new-privileges:true
+    logging: *bounded-logging
+
+  migrate:
+    <<: *api-image
+    profiles: ["tools"]
+    environment: *api-environment
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - backend
+    restart: "no"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    logging: *bounded-logging
+
+  api:
+    <<: *api-image
+    environment: *api-environment
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - backend
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+    stop_grace_period: 30s
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    logging: *bounded-logging
+
+  web:
+    image: ${WEB_IMAGE:-intelligent-energy-dashboard-web}:${IMAGE_TAG:-local}
+    platform: ${TARGET_PLATFORM:-linux/arm64}
+    build:
+      context: ..
+      dockerfile: apps/web/Dockerfile
+      target: production
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - edge
+      - backend
+    ports:
+      - "${LAN_BIND_ADDRESS:?LAN_BIND_ADDRESS must be the Pi private LAN IP}:${DASHBOARD_PORT:-8080}:80"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/nginx-health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+    stop_grace_period: 15s
+    init: true
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    logging: *bounded-logging
+
+networks:
+  edge:
+  backend:
+    internal: true
+
+volumes:
+  postgres_data:

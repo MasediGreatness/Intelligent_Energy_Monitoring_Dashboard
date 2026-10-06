@@ -1,0 +1,2915 @@
+{
+  "components": {
+    "schemas": {
+      "AlarmAcknowledgeRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "note": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "note"
+        ],
+        "title": "AlarmAcknowledgeRequest",
+        "type": "object"
+      },
+      "AlarmAcknowledgeResponse": {
+        "properties": {
+          "alarm": {
+            "$ref": "#/components/schemas/AlarmItem"
+          }
+        },
+        "required": [
+          "alarm"
+        ],
+        "title": "AlarmAcknowledgeResponse",
+        "type": "object"
+      },
+      "AlarmItem": {
+        "properties": {
+          "acknowledged_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acknowledged At"
+          },
+          "acknowledged_by": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acknowledged By"
+          },
+          "acknowledgement_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acknowledgement Note"
+          },
+          "alarm_type": {
+            "title": "Alarm Type",
+            "type": "string"
+          },
+          "cleared_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cleared At"
+          },
+          "device_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device Id"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "severity": {
+            "$ref": "#/components/schemas/Severity"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/LifecycleStatus"
+          },
+          "triggered_at": {
+            "format": "date-time",
+            "title": "Triggered At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "device_id",
+          "source",
+          "alarm_type",
+          "severity",
+          "message",
+          "triggered_at",
+          "acknowledged_at",
+          "acknowledged_by",
+          "acknowledgement_note",
+          "cleared_at",
+          "status"
+        ],
+        "title": "AlarmItem",
+        "type": "object"
+      },
+      "AnomalyItem": {
+        "properties": {
+          "actual_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Value"
+          },
+          "anomaly_type": {
+            "title": "Anomaly Type",
+            "type": "string"
+          },
+          "detected_at": {
+            "format": "date-time",
+            "title": "Detected At",
+            "type": "string"
+          },
+          "device_id": {
+            "format": "uuid",
+            "title": "Device Id",
+            "type": "string"
+          },
+          "expected_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Value"
+          },
+          "explanation": {
+            "title": "Explanation",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "metric": {
+            "title": "Metric",
+            "type": "string"
+          },
+          "score": {
+            "title": "Score",
+            "type": "number"
+          },
+          "severity": {
+            "$ref": "#/components/schemas/Severity"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AnomalyStatus"
+          }
+        },
+        "required": [
+          "id",
+          "device_id",
+          "detected_at",
+          "anomaly_type",
+          "severity",
+          "metric",
+          "actual_value",
+          "expected_value",
+          "score",
+          "explanation",
+          "status"
+        ],
+        "title": "AnomalyItem",
+        "type": "object"
+      },
+      "AnomalyStatus": {
+        "enum": [
+          "open",
+          "reviewed",
+          "cleared"
+        ],
+        "title": "AnomalyStatus",
+        "type": "string"
+      },
+      "CountByDeviceStatus": {
+        "properties": {
+          "disabled": {
+            "default": 0,
+            "title": "Disabled",
+            "type": "integer"
+          },
+          "offline": {
+            "default": 0,
+            "title": "Offline",
+            "type": "integer"
+          },
+          "online": {
+            "default": 0,
+            "title": "Online",
+            "type": "integer"
+          },
+          "stale": {
+            "default": 0,
+            "title": "Stale",
+            "type": "integer"
+          }
+        },
+        "title": "CountByDeviceStatus",
+        "type": "object"
+      },
+      "CountBySeverity": {
+        "properties": {
+          "critical": {
+            "default": 0,
+            "title": "Critical",
+            "type": "integer"
+          },
+          "high": {
+            "default": 0,
+            "title": "High",
+            "type": "integer"
+          },
+          "low": {
+            "default": 0,
+            "title": "Low",
+            "type": "integer"
+          },
+          "medium": {
+            "default": 0,
+            "title": "Medium",
+            "type": "integer"
+          }
+        },
+        "title": "CountBySeverity",
+        "type": "object"
+      },
+      "Criticality": {
+        "enum": [
+          "low",
+          "medium",
+          "high",
+          "critical"
+        ],
+        "title": "Criticality",
+        "type": "string"
+      },
+      "DailyEnergyItem": {
+        "properties": {
+          "completeness_pct": {
+            "title": "Completeness Pct",
+            "type": "number"
+          },
+          "day": {
+            "format": "date",
+            "title": "Day",
+            "type": "string"
+          },
+          "device_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device Id"
+          },
+          "energy_kwh": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Energy Kwh"
+          },
+          "peak_demand_kw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Peak Demand Kw"
+          }
+        },
+        "required": [
+          "day",
+          "device_id",
+          "energy_kwh",
+          "peak_demand_kw",
+          "completeness_pct"
+        ],
+        "title": "DailyEnergyItem",
+        "type": "object"
+      },
+      "DailyEnergyResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DailyEnergyItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "timezone": {
+            "title": "Timezone",
+            "type": "string"
+          }
+        },
+        "required": [
+          "timezone",
+          "items"
+        ],
+        "title": "DailyEnergyResponse",
+        "type": "object"
+      },
+      "DashboardSummary": {
+        "properties": {
+          "active_alarms": {
+            "$ref": "#/components/schemas/CountBySeverity"
+          },
+          "current_demand_change_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Demand Change Pct"
+          },
+          "current_demand_kw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Demand Kw"
+          },
+          "data_completeness_pct": {
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Data Completeness Pct",
+            "type": "number"
+          },
+          "demand_limit_kw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Demand Limit Kw"
+          },
+          "devices": {
+            "$ref": "#/components/schemas/CountByDeviceStatus"
+          },
+          "energy_today_kwh": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Energy Today Kwh"
+          },
+          "energy_vs_previous_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Energy Vs Previous Pct"
+          },
+          "excluded_stale_devices": {
+            "title": "Excluded Stale Devices",
+            "type": "integer"
+          },
+          "generated_at": {
+            "format": "date-time",
+            "title": "Generated At",
+            "type": "string"
+          },
+          "peak_demand_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Peak Demand At"
+          },
+          "peak_demand_kw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Peak Demand Kw"
+          },
+          "timezone": {
+            "title": "Timezone",
+            "type": "string"
+          }
+        },
+        "required": [
+          "generated_at",
+          "timezone",
+          "current_demand_kw",
+          "current_demand_change_pct",
+          "energy_today_kwh",
+          "energy_vs_previous_pct",
+          "peak_demand_kw",
+          "peak_demand_at",
+          "demand_limit_kw",
+          "active_alarms",
+          "devices",
+          "data_completeness_pct",
+          "excluded_stale_devices"
+        ],
+        "title": "DashboardSummary",
+        "type": "object"
+      },
+      "DeviceCreateRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[A-Z0-9][A-Z0-9_-]{0,63}$",
+            "title": "Code",
+            "type": "string"
+          },
+          "criticality": {
+            "$ref": "#/components/schemas/Criticality"
+          },
+          "enabled": {
+            "default": true,
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "location": {
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Location",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "phase_type": {
+            "$ref": "#/components/schemas/PhaseType"
+          },
+          "rated_power_kw": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 2000.0,
+            "title": "Rated Power Kw",
+            "type": "number"
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "location",
+          "phase_type",
+          "rated_power_kw",
+          "criticality"
+        ],
+        "title": "DeviceCreateRequest",
+        "type": "object"
+      },
+      "DeviceItem": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "criticality": {
+            "$ref": "#/components/schemas/Criticality"
+          },
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "last_seen_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Seen At"
+          },
+          "location": {
+            "title": "Location",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "phase_type": {
+            "$ref": "#/components/schemas/PhaseType"
+          },
+          "rated_power_kw": {
+            "title": "Rated Power Kw",
+            "type": "number"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DeviceStatus"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "name",
+          "location",
+          "phase_type",
+          "rated_power_kw",
+          "criticality",
+          "enabled",
+          "last_seen_at",
+          "status"
+        ],
+        "title": "DeviceItem",
+        "type": "object"
+      },
+      "DeviceMutationResponse": {
+        "properties": {
+          "device": {
+            "$ref": "#/components/schemas/DeviceItem"
+          }
+        },
+        "required": [
+          "device"
+        ],
+        "title": "DeviceMutationResponse",
+        "type": "object"
+      },
+      "DeviceStatus": {
+        "enum": [
+          "online",
+          "stale",
+          "offline",
+          "disabled"
+        ],
+        "title": "DeviceStatus",
+        "type": "string"
+      },
+      "DeviceUpdateRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "anyOf": [
+              {
+                "maxLength": 64,
+                "minLength": 1,
+                "pattern": "^[A-Z0-9][A-Z0-9_-]{0,63}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code"
+          },
+          "criticality": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Criticality"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "maxLength": 160,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "phase_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PhaseType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rated_power_kw": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "maximum": 2000.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rated Power Kw"
+          }
+        },
+        "title": "DeviceUpdateRequest",
+        "type": "object"
+      },
+      "EventItem": {
+        "properties": {
+          "actor_user_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actor User Id"
+          },
+          "details_json": {
+            "additionalProperties": true,
+            "title": "Details Json",
+            "type": "object"
+          },
+          "entity_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entity Id"
+          },
+          "entity_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entity Type"
+          },
+          "event_at": {
+            "format": "date-time",
+            "title": "Event At",
+            "type": "string"
+          },
+          "event_type": {
+            "title": "Event Type",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "event_at",
+          "actor_user_id",
+          "event_type",
+          "entity_type",
+          "entity_id",
+          "details_json"
+        ],
+        "title": "EventItem",
+        "type": "object"
+      },
+      "ForecastItem": {
+        "properties": {
+          "device_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device Id"
+          },
+          "generated_at": {
+            "format": "date-time",
+            "title": "Generated At",
+            "type": "string"
+          },
+          "horizon_minutes": {
+            "title": "Horizon Minutes",
+            "type": "integer"
+          },
+          "lower_kw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lower Kw"
+          },
+          "model_version": {
+            "title": "Model Version",
+            "type": "string"
+          },
+          "predicted_power_kw": {
+            "title": "Predicted Power Kw",
+            "type": "number"
+          },
+          "target_at": {
+            "format": "date-time",
+            "title": "Target At",
+            "type": "string"
+          },
+          "upper_kw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Upper Kw"
+          }
+        },
+        "required": [
+          "device_id",
+          "generated_at",
+          "target_at",
+          "horizon_minutes",
+          "predicted_power_kw",
+          "lower_kw",
+          "upper_kw",
+          "model_version"
+        ],
+        "title": "ForecastItem",
+        "type": "object"
+      },
+      "ForecastResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ForecastItem"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "ForecastResponse",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HealthResponse": {
+        "additionalProperties": false,
+        "description": "Process-only liveness response.",
+        "properties": {
+          "service": {
+            "const": "energy-dashboard-api",
+            "title": "Service",
+            "type": "string"
+          },
+          "status": {
+            "const": "ok",
+            "title": "Status",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "service",
+          "version"
+        ],
+        "title": "HealthResponse",
+        "type": "object"
+      },
+      "HistoryPoint": {
+        "properties": {
+          "bucket_at": {
+            "format": "date-time",
+            "title": "Bucket At",
+            "type": "string"
+          },
+          "completeness_pct": {
+            "title": "Completeness Pct",
+            "type": "number"
+          },
+          "sample_count": {
+            "title": "Sample Count",
+            "type": "integer"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "bucket_at",
+          "value",
+          "sample_count",
+          "completeness_pct"
+        ],
+        "title": "HistoryPoint",
+        "type": "object"
+      },
+      "HistoryResponse": {
+        "properties": {
+          "series": {
+            "items": {
+              "$ref": "#/components/schemas/HistorySeries"
+            },
+            "title": "Series",
+            "type": "array"
+          },
+          "timezone": {
+            "title": "Timezone",
+            "type": "string"
+          }
+        },
+        "required": [
+          "timezone",
+          "series"
+        ],
+        "title": "HistoryResponse",
+        "type": "object"
+      },
+      "HistorySeries": {
+        "properties": {
+          "device_id": {
+            "format": "uuid",
+            "title": "Device Id",
+            "type": "string"
+          },
+          "interval": {
+            "title": "Interval",
+            "type": "string"
+          },
+          "metric": {
+            "title": "Metric",
+            "type": "string"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/HistoryPoint"
+            },
+            "title": "Points",
+            "type": "array"
+          }
+        },
+        "required": [
+          "device_id",
+          "metric",
+          "interval",
+          "points"
+        ],
+        "title": "HistorySeries",
+        "type": "object"
+      },
+      "IngestionError": {
+        "properties": {
+          "field": {
+            "title": "Field",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "record_index": {
+            "title": "Record Index",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "record_index",
+          "field",
+          "reason"
+        ],
+        "title": "IngestionError",
+        "type": "object"
+      },
+      "LatestMeasurement": {
+        "properties": {
+          "active_power_kw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Power Kw"
+          },
+          "current_a": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current A"
+          },
+          "data_quality": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Quality"
+          },
+          "device_code": {
+            "title": "Device Code",
+            "type": "string"
+          },
+          "device_id": {
+            "format": "uuid",
+            "title": "Device Id",
+            "type": "string"
+          },
+          "frequency_hz": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frequency Hz"
+          },
+          "measured_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Measured At"
+          },
+          "power_factor": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Power Factor"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DeviceStatus"
+          },
+          "voltage_v": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voltage V"
+          }
+        },
+        "required": [
+          "device_id",
+          "device_code",
+          "measured_at",
+          "active_power_kw",
+          "voltage_v",
+          "current_a",
+          "power_factor",
+          "frequency_hz",
+          "data_quality",
+          "status"
+        ],
+        "title": "LatestMeasurement",
+        "type": "object"
+      },
+      "LifecycleStatus": {
+        "enum": [
+          "open",
+          "acknowledged",
+          "cleared"
+        ],
+        "title": "LifecycleStatus",
+        "type": "string"
+      },
+      "LoginRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "format": "email",
+            "title": "Email",
+            "type": "string"
+          },
+          "password": {
+            "format": "password",
+            "maxLength": 256,
+            "minLength": 12,
+            "title": "Password",
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "LoginRequest",
+        "type": "object"
+      },
+      "LoginResponse": {
+        "properties": {
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserIdentity"
+          }
+        },
+        "required": [
+          "user",
+          "expires_at"
+        ],
+        "title": "LoginResponse",
+        "type": "object"
+      },
+      "LogoutResponse": {
+        "properties": {
+          "status": {
+            "default": "logged_out",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "title": "LogoutResponse",
+        "type": "object"
+      },
+      "MeasurementIngestBatch": {
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "maxItems": 60,
+            "minItems": 1,
+            "title": "Records",
+            "type": "array"
+          },
+          "source": {
+            "enum": [
+              "simulator",
+              "gateway"
+            ],
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "records"
+        ],
+        "title": "MeasurementIngestBatch",
+        "type": "object"
+      },
+      "MeasurementIngestResponse": {
+        "properties": {
+          "accepted_count": {
+            "title": "Accepted Count",
+            "type": "integer"
+          },
+          "duplicate_count": {
+            "title": "Duplicate Count",
+            "type": "integer"
+          },
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/IngestionError"
+            },
+            "title": "Errors",
+            "type": "array"
+          },
+          "rejected_count": {
+            "title": "Rejected Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "accepted_count",
+          "duplicate_count",
+          "rejected_count",
+          "errors"
+        ],
+        "title": "MeasurementIngestResponse",
+        "type": "object"
+      },
+      "Page_AlarmItem_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AlarmItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "page",
+          "page_size",
+          "total",
+          "items"
+        ],
+        "title": "Page[AlarmItem]",
+        "type": "object"
+      },
+      "Page_AnomalyItem_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AnomalyItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "page",
+          "page_size",
+          "total",
+          "items"
+        ],
+        "title": "Page[AnomalyItem]",
+        "type": "object"
+      },
+      "Page_DeviceItem_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DeviceItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "page",
+          "page_size",
+          "total",
+          "items"
+        ],
+        "title": "Page[DeviceItem]",
+        "type": "object"
+      },
+      "Page_EventItem_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/EventItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "page",
+          "page_size",
+          "total",
+          "items"
+        ],
+        "title": "Page[EventItem]",
+        "type": "object"
+      },
+      "PhaseType": {
+        "enum": [
+          "single_phase",
+          "three_phase"
+        ],
+        "title": "PhaseType",
+        "type": "string"
+      },
+      "ReadinessResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "database": {
+            "const": "ready",
+            "title": "Database",
+            "type": "string"
+          },
+          "migrations": {
+            "const": "at_head",
+            "title": "Migrations",
+            "type": "string"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "string"
+          },
+          "status": {
+            "const": "ready",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "database",
+          "migrations",
+          "revision"
+        ],
+        "title": "ReadinessResponse",
+        "type": "object"
+      },
+      "SettingItem": {
+        "properties": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "value_json": {
+            "title": "Value Json"
+          }
+        },
+        "required": [
+          "key",
+          "value_json",
+          "description",
+          "updated_at"
+        ],
+        "title": "SettingItem",
+        "type": "object"
+      },
+      "SettingUpdateRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "title": "Value"
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "title": "SettingUpdateRequest",
+        "type": "object"
+      },
+      "SettingUpdateResponse": {
+        "properties": {
+          "setting": {
+            "$ref": "#/components/schemas/SettingItem"
+          }
+        },
+        "required": [
+          "setting"
+        ],
+        "title": "SettingUpdateResponse",
+        "type": "object"
+      },
+      "Severity": {
+        "enum": [
+          "low",
+          "medium",
+          "high",
+          "critical"
+        ],
+        "title": "Severity",
+        "type": "string"
+      },
+      "UserIdentity": {
+        "properties": {
+          "email": {
+            "format": "email",
+            "title": "Email",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/UserRole"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "role"
+        ],
+        "title": "UserIdentity",
+        "type": "object"
+      },
+      "UserRole": {
+        "enum": [
+          "viewer",
+          "operator",
+          "admin"
+        ],
+        "title": "UserRole",
+        "type": "string"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "APIKeyCookie": {
+        "in": "cookie",
+        "name": "energy_session",
+        "type": "apiKey"
+      }
+    }
+  },
+  "info": {
+    "description": "Monitoring and advisory only; no industrial load-control path.",
+    "title": "Intelligent Industrial Energy Dashboard API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/alarms": {
+      "get": {
+        "operationId": "alarms_api_v1_alarms_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/LifecycleStatus"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "severity",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Severity"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Severity"
+            }
+          },
+          {
+            "in": "query",
+            "name": "device_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Device Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "To"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_AlarmItem_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_DATE_RANGE",
+                    "details": {
+                      "field": "to"
+                    },
+                    "message": "The end timestamp must be after the start timestamp.",
+                    "request_id": "01J5EXAMPLE"
+                  }
+                }
+              }
+            },
+            "description": "Invalid query parameters"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Alarms",
+        "tags": [
+          "dashboard reads"
+        ]
+      }
+    },
+    "/api/v1/alarms/{alarm_id}/acknowledge": {
+      "patch": {
+        "operationId": "acknowledge_alarm_api_v1_alarms__alarm_id__acknowledge_patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "alarm_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Alarm Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlarmAcknowledgeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlarmAcknowledgeResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Acknowledge Alarm",
+        "tags": [
+          "protected writes"
+        ]
+      }
+    },
+    "/api/v1/anomalies": {
+      "get": {
+        "operationId": "anomalies_api_v1_anomalies_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/AnomalyStatus"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "severity",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Severity"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Severity"
+            }
+          },
+          {
+            "in": "query",
+            "name": "device_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Device Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "To"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_AnomalyItem_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_DATE_RANGE",
+                    "details": {
+                      "field": "to"
+                    },
+                    "message": "The end timestamp must be after the start timestamp.",
+                    "request_id": "01J5EXAMPLE"
+                  }
+                }
+              }
+            },
+            "description": "Invalid query parameters"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Anomalies",
+        "tags": [
+          "dashboard reads"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "login_api_v1_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Login",
+        "tags": [
+          "authentication"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "logout_api_v1_auth_logout_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Logout",
+        "tags": [
+          "authentication"
+        ]
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "operationId": "me_api_v1_auth_me_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserIdentity"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Me",
+        "tags": [
+          "authentication"
+        ]
+      }
+    },
+    "/api/v1/dashboard/summary": {
+      "get": {
+        "operationId": "dashboard_summary_api_v1_dashboard_summary_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "timezone",
+            "required": false,
+            "schema": {
+              "default": "Africa/Johannesburg",
+              "title": "Timezone",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummary"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_DATE_RANGE",
+                    "details": {
+                      "field": "to"
+                    },
+                    "message": "The end timestamp must be after the start timestamp.",
+                    "request_id": "01J5EXAMPLE"
+                  }
+                }
+              }
+            },
+            "description": "Invalid query parameters"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Dashboard Summary",
+        "tags": [
+          "dashboard reads"
+        ]
+      }
+    },
+    "/api/v1/devices": {
+      "get": {
+        "operationId": "devices_api_v1_devices_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "enabled",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Enabled"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_DeviceItem_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_DATE_RANGE",
+                    "details": {
+                      "field": "to"
+                    },
+                    "message": "The end timestamp must be after the start timestamp.",
+                    "request_id": "01J5EXAMPLE"
+                  }
+                }
+              }
+            },
+            "description": "Invalid query parameters"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Devices",
+        "tags": [
+          "dashboard reads"
+        ]
+      },
+      "post": {
+        "operationId": "create_device_api_v1_devices_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceMutationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Create Device",
+        "tags": [
+          "protected writes"
+        ]
+      }
+    },
+    "/api/v1/devices/{device_id}": {
+      "patch": {
+        "operationId": "update_device_api_v1_devices__device_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "device_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Device Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceMutationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Update Device",
+        "tags": [
+          "protected writes"
+        ]
+      }
+    },
+    "/api/v1/energy/daily": {
+      "get": {
+        "operationId": "daily_energy_api_v1_energy_daily_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from_date",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "From Date",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to_date",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "To Date",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "timezone",
+            "required": false,
+            "schema": {
+              "default": "UTC",
+              "title": "Timezone",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "device_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Device Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DailyEnergyResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_DATE_RANGE",
+                    "details": {
+                      "field": "to"
+                    },
+                    "message": "The end timestamp must be after the start timestamp.",
+                    "request_id": "01J5EXAMPLE"
+                  }
+                }
+              }
+            },
+            "description": "Invalid query parameters"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Daily Energy",
+        "tags": [
+          "dashboard reads"
+        ]
+      }
+    },
+    "/api/v1/events": {
+      "get": {
+        "operationId": "events_api_v1_events_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "event_type",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Event Type"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_EventItem_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_DATE_RANGE",
+                    "details": {
+                      "field": "to"
+                    },
+                    "message": "The end timestamp must be after the start timestamp.",
+                    "request_id": "01J5EXAMPLE"
+                  }
+                }
+              }
+            },
+            "description": "Invalid query parameters"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Events",
+        "tags": [
+          "dashboard reads"
+        ]
+      }
+    },
+    "/api/v1/forecasts/latest": {
+      "get": {
+        "operationId": "latest_forecast_api_v1_forecasts_latest_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "horizon_minutes",
+            "required": true,
+            "schema": {
+              "exclusiveMinimum": 0,
+              "title": "Horizon Minutes",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "device_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Device Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_DATE_RANGE",
+                    "details": {
+                      "field": "to"
+                    },
+                    "message": "The end timestamp must be after the start timestamp.",
+                    "request_id": "01J5EXAMPLE"
+                  }
+                }
+              }
+            },
+            "description": "Invalid query parameters"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Latest Forecast",
+        "tags": [
+          "dashboard reads"
+        ]
+      }
+    },
+    "/api/v1/ingest/measurements": {
+      "post": {
+        "operationId": "ingest_measurement_batch_api_v1_ingest_measurements_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Ingest-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Ingest-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MeasurementIngestBatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeasurementIngestResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Ingest Measurement Batch",
+        "tags": [
+          "ingestion"
+        ]
+      }
+    },
+    "/api/v1/measurements/history": {
+      "get": {
+        "operationId": "measurement_history_api_v1_measurements_history_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "device_id",
+            "required": true,
+            "schema": {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Device Id",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "title": "From",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "title": "To",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "interval",
+            "required": true,
+            "schema": {
+              "enum": [
+                "raw",
+                "10s",
+                "1m",
+                "15m",
+                "1h",
+                "1d"
+              ],
+              "title": "Interval",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "metric",
+            "required": true,
+            "schema": {
+              "enum": [
+                "voltage_v",
+                "current_a",
+                "active_power_kw",
+                "reactive_power_kvar",
+                "apparent_power_kva",
+                "power_factor",
+                "frequency_hz",
+                "energy_kwh_total"
+              ],
+              "title": "Metric",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "timezone",
+            "required": false,
+            "schema": {
+              "default": "UTC",
+              "title": "Timezone",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_DATE_RANGE",
+                    "details": {
+                      "field": "to"
+                    },
+                    "message": "The end timestamp must be after the start timestamp.",
+                    "request_id": "01J5EXAMPLE"
+                  }
+                }
+              }
+            },
+            "description": "Invalid query parameters"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Measurement History",
+        "tags": [
+          "dashboard reads"
+        ]
+      }
+    },
+    "/api/v1/measurements/latest": {
+      "get": {
+        "operationId": "latest_measurements_api_v1_measurements_latest_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "device_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Device Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LatestMeasurement"
+                  },
+                  "title": "Response Latest Measurements Api V1 Measurements Latest Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_DATE_RANGE",
+                    "details": {
+                      "field": "to"
+                    },
+                    "message": "The end timestamp must be after the start timestamp.",
+                    "request_id": "01J5EXAMPLE"
+                  }
+                }
+              }
+            },
+            "description": "Invalid query parameters"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Latest Measurements",
+        "tags": [
+          "dashboard reads"
+        ]
+      }
+    },
+    "/api/v1/settings": {
+      "get": {
+        "operationId": "settings_api_v1_settings_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SettingItem"
+                  },
+                  "title": "Response Settings Api V1 Settings Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "INVALID_DATE_RANGE",
+                    "details": {
+                      "field": "to"
+                    },
+                    "message": "The end timestamp must be after the start timestamp.",
+                    "request_id": "01J5EXAMPLE"
+                  }
+                }
+              }
+            },
+            "description": "Invalid query parameters"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Settings",
+        "tags": [
+          "dashboard reads"
+        ]
+      }
+    },
+    "/api/v1/settings/{key}": {
+      "patch": {
+        "operationId": "update_setting_api_v1_settings__key__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingUpdateResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "summary": "Update Setting",
+        "tags": [
+          "protected writes"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "description": "Return process liveness without touching the database.",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/ready": {
+      "get": {
+        "operationId": "readiness_ready_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadinessResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Readiness",
+        "tags": [
+          "health"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+# Anticipated Python test, quality, and engineering dependencies for Steps 2-16.
+-r requirements-backend.txt
+pytest>=9.0.3,<10
+pytest-asyncio>=1.1,<2
+pytest-cov>=6.2,<8
+testcontainers[postgres]>=4.12,<5
+freezegun>=1.5,<2
+hypothesis>=6.138,<7
+ruff>=0.12,<1
+mypy>=1.17,<2
+types-PyYAML>=6.0,<7
+pip-audit>=2.9,<3
+openapi-spec-validator>=0.7,<1

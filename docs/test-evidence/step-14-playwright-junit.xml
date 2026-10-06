@@ -1,0 +1,16 @@
+<testsuites id="" name="" tests="6" failures="0" skipped="0" errors="0" time="40.529084000000005">
+<testsuite name="step14.spec.ts" timestamp="2026-08-17T17:12:01.705Z" hostname="" tests="6" failures="0" skipped="0" time="38.621" errors="0">
+<testcase name="Step 14 acceptance flows › all seven authenticated routes and admin controls are usable" classname="step14.spec.ts" time="11.76">
+</testcase>
+<testcase name="Step 14 acceptance flows › invalid settings fail before any write request" classname="step14.spec.ts" time="4.347">
+</testcase>
+<testcase name="Step 14 acceptance flows › API interruption shows a retryable honest error" classname="step14.spec.ts" time="11.752">
+</testcase>
+<testcase name="Step 14 acceptance flows › WebSocket interruption is visible as reconnecting" classname="step14.spec.ts" time="3.883">
+</testcase>
+<testcase name="Step 14 acceptance flows › 375 px mobile navigation reaches core workflows" classname="step14.spec.ts" time="4.487">
+</testcase>
+<testcase name="Step 14 acceptance flows › invalid login is rejected without echoing the password" classname="step14.spec.ts" time="2.392">
+</testcase>
+</testsuite>
+</testsuites>
