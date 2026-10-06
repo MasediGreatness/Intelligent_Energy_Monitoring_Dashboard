@@ -214,10 +214,3 @@ Playwright setup and evidence commands are recorded in the
 - [Step 15 implementation evidence](docs/test-evidence/step-15-packaging-operations-gate.md)
 - [AI Use Declaration template](docs/ai-use-declaration.md)
 
-## Academic ownership
-
-The student must personally review, understand, execute, and be able to explain
-every design choice, calculation, test, and limitation. The AI declaration in
-this repository is deliberately unsigned: only the student can describe the
-actual assistance used, record personal verification, and sign/date the final
-submission declaration.
